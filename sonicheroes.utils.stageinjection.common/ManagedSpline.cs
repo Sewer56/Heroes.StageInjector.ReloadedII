@@ -11,5 +11,12 @@ namespace SonicHeroes.Utils.StageInjector.Common
     {
         public SplineType       SplineType  { get; set; }
         public SplineVertex[]   Vertices    { get; set; }
+
+        public ManagedSpline() { }
+        public ManagedSpline(SplineType splineType, SplineVertex[] vertices)
+        {
+            SplineType = splineType;
+            Vertices = vertices;
+        }
     }
 }
