@@ -53,15 +53,15 @@ namespace SonicHeroes.Utils.StageInjector.Common.Shared.Splines
             FromSplineJson(managedSpline);
         }
 
-        private void FromSplineJson(ManagedSpline splineFile)
+        private void FromSplineJson(ManagedSpline managedSpline)
         {
-            SplineType       = splineFile.SplineType;
-            NumberOfVertices = (ushort)splineFile.Vertices.Length;
+            SplineType       = managedSpline.SplineType;
+            NumberOfVertices = (ushort)managedSpline.Vertices.Length;
 
-            foreach (var vertex in splineFile.Vertices)
+            foreach (var vertex in managedSpline.Vertices)
                 TotalSplineLength += vertex.DistanceToNextVertex;
             
-            CopyVertices(splineFile);
+            CopyVertices(managedSpline);
         }
 
         public void Dispose()
@@ -72,10 +72,10 @@ namespace SonicHeroes.Utils.StageInjector.Common.Shared.Splines
 
         /* Construction Helpers */
 
-        private void CopyVertices(ManagedSpline splineFile)
+        private void CopyVertices(ManagedSpline managedSpline)
         {
             var memory      = Memory.Instance;
-            var vertices    = splineFile.Vertices;
+            var vertices    = managedSpline.Vertices;
 
             int structSize  = StructArray.GetSize<SplineVertex>(vertices.Length);
             VertexList      = (SplineVertex*)memory.Allocate(structSize);
