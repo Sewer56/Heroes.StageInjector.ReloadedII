@@ -1,0 +1,3 @@
+[submodule "Submodules/Redirector"]
+	path = Submodules/Redirector
+	url = https://github.com/Reloaded-Project/reloaded.universal.redirector.git

@@ -1,0 +1,11 @@
+{
+  "ModId": "sonicheroes.utils.stageinjector",
+  "ModName": "Sonic Heroes: Stage Injector",
+  "ModAuthor": "Sewer56",
+  "ModVersion": "1.0.0",
+  "ModDescription": "Mod that allows for the loading of custom stages in other mods with ease",
+  "ModDll": "SonicHeroes.Utils.StageInjector.dll",
+  "ModIcon": "Preview.png",
+  "ModDependencies": [ "reloaded.sharedlib.hooks", "reloaded.universal.redirector" ],
+  "SupportedAppId": [ "tsonic_win.exe" ]
+}
