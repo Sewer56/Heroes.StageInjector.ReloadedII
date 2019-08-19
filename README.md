@@ -65,7 +65,7 @@ For `Stage.json`, it can be created by [Heroes Power Plant](https://github.com/i
 
 # Integrating into Level Editing Tools (for Programmers)
 
-This is a quick barebones introduction/summary of how you can generate `Splines.json` and `Stage.json` to be used with this program in your own programs.
+This is a quick barebones introduction/summary of how you can generate `Splines.json` and `Stage.json` to be used with this mod in your own programs.
 
 ### Prerequisites
 - Add the [sonicheroes.utils.stageinjection.common](https://www.nuget.org/packages/SonicHeroes.Utils.StageInjector.Common) NuGet package to your project. 
