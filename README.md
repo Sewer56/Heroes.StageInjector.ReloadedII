@@ -129,6 +129,8 @@ splineVertex.Pitch = splineVertex.GetPitch(nextSplineVertex);
 ```
 
 ##### Example
+
+Auto-calculate distance and pitch for all vertices of the spline.
 ```csharp
 var vertices = managedSpline.Vertices;
 for (int x = 0; x < vertices.Length - 1; x++)
