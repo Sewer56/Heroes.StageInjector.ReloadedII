@@ -48,7 +48,7 @@ namespace SonicHeroes.Utils.StageInjector
         public void Dispose()
         {
             if (_redirectorController.TryGetTarget(out var controller))
-                controller.RemoveRedirectFolder(_stageFolder);
+                controller.RemoveRedirectFolder(RedirectionFolder);
 
             foreach (var spline in _splines)
                 spline.Dispose();

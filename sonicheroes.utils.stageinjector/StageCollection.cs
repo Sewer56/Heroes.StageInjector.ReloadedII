@@ -52,7 +52,7 @@ namespace SonicHeroes.Utils.StageInjector
             var modDirectory    = _modLoader.GetDirectoryForModId(modId);
             var stagesDirectory = $"{modDirectory}\\Stages";
             var stages          = Directory.GetDirectories(stagesDirectory);
-            var stageCollection = stages.Select(x => new CustomStage(x, _redirectorController));
+            var stageCollection = stages.Select(x => new CustomStage(x, _redirectorController)).ToArray();
             _idToStages[modId]  = stageCollection;
             _allStages.AddRange(stageCollection);
         }
