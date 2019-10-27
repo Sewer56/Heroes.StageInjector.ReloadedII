@@ -11,9 +11,10 @@ namespace SonicHeroes.Utils.StageInjector.Common.Structs.Positions.Substructures
         public Vector Position { get; set; }
 
         /// <summary>
-        /// The vertical angle of their poses expressed in BAMS.
+        /// BAMS 0 - 65535. Pitch is clockwise, i.e. rotating 90 degrees causes the characters' legs to point AWAY from the camera.
         /// </summary>
-        public int Pitch { get; set; }
+        public ushort Pitch   { get; set; }
+        public ushort Unknown { get; set; }
 
         public int Null { get; set; }
     }

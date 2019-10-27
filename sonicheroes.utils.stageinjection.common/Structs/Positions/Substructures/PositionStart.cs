@@ -15,11 +15,17 @@ namespace SonicHeroes.Utils.StageInjector.Common.Structs.Positions.Substructures
         public Vector Position { get; set; }
 
         /// <summary>
-        /// The vertical direction of the position expressed in BAMS.
+        /// BAMS 0 - 65535. Pitch is clockwise, i.e. rotating 90 degrees causes the characters' legs to point AWAY from the camera.
         /// </summary>
-        public int Pitch { get; set; }
+        public ushort Pitch { get; set; }
 
-        public int UnknownUnused { get; set; }
+        /// <summary>
+        /// BAMS 0 - 65535. Roll is anticlockwise, i.e. to the left.
+        /// Values between 25% and 75% will cause the characters to land backwards on rails.
+        /// </summary>
+        public ushort Roll { get; set; }
+
+        public int Unknown { get; set; }
 
         /// <summary>
         /// Describes how the player starts off the stage.
