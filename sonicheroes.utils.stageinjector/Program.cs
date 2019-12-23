@@ -16,6 +16,7 @@ namespace SonicHeroes.Utils.StageInjector
         private IReloadedHooks _hooks;
         private StageCollection _collection;
 
+        public static void Main() { }
         public void Start(IModLoaderV1 loader)
         {
             _modLoader = (IModLoader)loader;
