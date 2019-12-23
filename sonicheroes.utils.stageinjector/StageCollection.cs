@@ -2,40 +2,43 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Reloaded.Hooks.ReloadedII.Interfaces;
+using Heroes.SDK.API;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Universal.Redirector.Interfaces;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Enums;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Splines;
-using SonicHeroes.Utils.StageInjector.Common.Structs.Positions.Substructures;
-using SonicHeroes.Utils.StageInjector.Structures;
+using Heroes.SDK.Definitions.Enums;
+using Heroes.SDK.Definitions.Structures.Stage.Spawn;
+using Heroes.SDK.Definitions.Structures.Stage.Splines;
+using Reloaded.Hooks.Definitions;
+using Stage = Heroes.SDK.Definitions.Enums.Stage;
+using static Heroes.SDK.Classes.PseudoNativeClasses.StageFunctions;
 
 namespace SonicHeroes.Utils.StageInjector
 {
     public unsafe class StageCollection
     {
-        private Dictionary<string, IEnumerable<Stage>> _idToStages = new Dictionary<string, IEnumerable<Stage>>();
-        private List<Stage> _allStages  = new List<Stage>(); // Ordered list of all stages.
+        private Dictionary<string, IEnumerable<StageBase>> _idToStages = new Dictionary<string, IEnumerable<StageBase>>();
+        private List<StageBase> _allStages  = new List<StageBase>(); // Ordered list of all stages.
 
         private WeakReference<IRedirectorController> _redirectorController;
         private IModLoader      _modLoader;
         private ILogger         _logger;
-        private Hooks.Hooks     _hooks;
+        private IHook<InitPath> _initPathHook;
+        private IHook<SearchGoalStageLocator> _getEndPositionHook;
+        private IHook<SearchIntroStageLocator> _getBragPositionHook;
+        private IHook<SearchStartStageLocator> _getStartPositionHook;
 
-        private StageId*        _stageId    = (StageId*)    0x8D6710;
-        private ModeSwitch*     _modeSwitch = (ModeSwitch*) 0x00A777E4;
-        private TeamTop*        _teamTop    = (TeamTop*)    0x00A4C268;
-
-        public StageCollection(IModLoader loader, IReloadedHooks hooks)
+        public StageCollection(IModLoader loader)
         {
             _modLoader = loader;
             _logger    = (ILogger) _modLoader.GetLogger();
             _redirectorController   = _modLoader.GetController<IRedirectorController>();
-            _hooks = new Hooks.Hooks(hooks, InitSplineImpl, GetStartPositionImpl, GetEndPositionImpl, GetBragPositionImpl);
+            _initPathHook = Fun_InitializeSplines.Hook(InitSplineImpl).Activate();
+            _getEndPositionHook = Fun_GetEndPosition.Hook(GetEndPositionImpl).Activate();
+            _getBragPositionHook = Fun_GetIntroPosition.Hook(GetBragPositionImpl).Activate();
+            _getStartPositionHook = Fun_GetStartPosition.Hook(GetStartPositionImpl).Activate();
 
             // Populate Default Stages
-            foreach (StageId stageId in (StageId[])Enum.GetValues(typeof(StageId)))
+            foreach (var stageId in (Stage[])Enum.GetValues(typeof(Stage)))
             {
                 _allStages.Add(new DefaultStage(stageId));
             }
@@ -95,51 +98,51 @@ namespace SonicHeroes.Utils.StageInjector
         /// </summary>
         private bool InitSplineImpl(Spline** splinePointerArray)
         {
-            if (TryGetCurrentStage(out Stage stage))
+            if (TryGetCurrentStage(out StageBase stage))
             {
                 if (stage.Splines != null)
-                    return _hooks.InitPathHook.OriginalFunction(stage.Splines);
+                    return _initPathHook.OriginalFunction(stage.Splines);
             }
 
-            return _hooks.InitPathHook.OriginalFunction(splinePointerArray);
+            return _initPathHook.OriginalFunction(splinePointerArray);
         }
 
         /// <summary>
         /// See <see cref="SonicHeroes.Utils.StageInjector.Hooks.Hooks.GetEndPosition"/>
         /// </summary>
-        private PositionEnd* GetEndPositionImpl(Teams team)
+        private PositionEnd* GetEndPositionImpl(Team team)
         {
-            if (TryGetCurrentStage(out Stage stage))
+            if (TryGetCurrentStage(out StageBase stage))
                 return &stage.EndPositions[(int) team];
 
-            return _hooks.GetEndPositionHook.OriginalFunction(team);
+            return _getEndPositionHook.OriginalFunction(team);
         }
 
         /// <summary>
         /// See <see cref="SonicHeroes.Utils.StageInjector.Hooks.Hooks.GetBragPosition"/>
         /// </summary>
-        private PositionEnd* GetBragPositionImpl(Teams team)
+        private PositionEnd* GetBragPositionImpl(Team team)
         {
-            if (TryGetCurrentStage(out Stage stage))
+            if (TryGetCurrentStage(out StageBase stage))
                 return &stage.BragPositions[(int)team];
 
-            return _hooks.GetBragPositionHook.OriginalFunction(team);
+            return _getBragPositionHook.OriginalFunction(team);
         }
 
         /// <summary>
         /// See <see cref="SonicHeroes.Utils.StageInjector.Hooks.Hooks.GetStartPosition"/>
         /// </summary>
-        private PositionStart* GetStartPositionImpl(Teams team)
+        private PositionStart* GetStartPositionImpl(Team team)
         {
-            if (TryGetCurrentStage(out Stage stage))
+            if (TryGetCurrentStage(out StageBase stage))
                 return GetStartPositionForStage(stage, team);
 
-            return _hooks.GetStartPositionHook.OriginalFunction(team);
+            return _getStartPositionHook.OriginalFunction(team);
         }
 
-        private PositionStart* GetStartPositionForStage(Stage stage, Teams team)
+        private PositionStart* GetStartPositionForStage(StageBase stage, Team team)
         {
-            if (IsTwoPlayer())
+            if (State.IsMultiplayerMode())
             {
                 // Bug: Setting the same team multiple times will always use start position of first player to use that team.
                 // This bug is inherited from the game, because the game only uses the team parameter to determine
@@ -150,7 +153,7 @@ namespace SonicHeroes.Utils.StageInjector
                 int playerNumber = 0;
                 for (; playerNumber <= 3; playerNumber++)
                 {
-                    if (_teamTop[playerNumber].CurrentTeam == team)
+                    if (Player.TeamTop[playerNumber].AsReference().Team == team)
                         break;
                 }
 
@@ -166,14 +169,14 @@ namespace SonicHeroes.Utils.StageInjector
         }
 
         /// <summary>
-        /// Attempts to obtain a <see cref="Stage"/> object from this class' collection for the current stage.
+        /// Attempts to obtain a <see cref="StageBase"/> object from this class' collection for the current stage.
         /// </summary>
-        private bool TryGetCurrentStage(out Stage stage)
+        private bool TryGetCurrentStage(out StageBase stage)
         {
             for (int x = _allStages.Count - 1; x >= 0; x--)
             {
                 var currentStage = _allStages[x];
-                if (currentStage.StageId == *_stageId)
+                if (currentStage.StageId == State.CurrentStage)
                 {
                     stage = currentStage;
                     return true;
@@ -182,12 +185,6 @@ namespace SonicHeroes.Utils.StageInjector
 
             stage = null;
             return false;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool IsTwoPlayer()
-        {
-            return _modeSwitch->Flags.twoPlayerMode;
         }
     }
 }

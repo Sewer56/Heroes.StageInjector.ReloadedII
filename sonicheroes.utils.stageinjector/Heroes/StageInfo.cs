@@ -1,10 +1,11 @@
-﻿using SonicHeroes.Utils.StageInjector.Common;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Enums;
-using SonicHeroes.Utils.StageInjector.Common.Structs.Positions;
+﻿using Heroes.SDK.Classes.PseudoNativeClasses;
+using Heroes.SDK.Definitions.Enums;
+using Heroes.SDK.Definitions.Structures.Stage.Spawn.Collections;
+using Heroes.SDK.Utilities.Tagger;
+using Heroes.SDK.Utilities.Tagger.Enums;
 
 namespace SonicHeroes.Utils.StageInjector.Heroes
 {
-
     public unsafe struct StageInfo
     {
         public SingleplayerStart*   StartPositions;
@@ -15,55 +16,55 @@ namespace SonicHeroes.Utils.StageInjector.Heroes
         /// <summary>
         /// Obtains the pointers for a specific stage's start/ending/bragging positions for the given stage.
         /// </summary>
-        public static StageInfo FromStageId(StageId stageId)
+        public static StageInfo FromStageId(Stage stageId)
         {
             // Categorize the individual stage and decide if to take 1P or 2P path.
-            StageTags.StageTag stageTags = StageTags.CategorizeStage((int)stageId);
-            StageInfo stageInfo = new StageInfo();
+            var tags = Tagger.GetStageTags(stageId);
+            var info = new StageInfo();
 
             // Check if 2 player to perform or 1 player.
-            if (stageTags.HasFlag(StageTags.StageTag.TwoPlayer))
+            if (tags.HasFlag(StageTag.TwoPlayer))
             {
-                for (int x = 0; x < Pointers.MultiPlayerStartPointer.Count; x++)
+                for (int x = 0; x < StageFunctions.MultiplayerStart.Count; x++)
                 {
-                    if (Pointers.MultiPlayerStartPointer[x].StageId == stageId)
+                    if (StageFunctions.MultiplayerStart[x].StageId == stageId)
                     {
-                        stageInfo.MultiplayerStartPositions = (MultiplayerStart*) Pointers.MultiPlayerStartPointer.GetPointerToElement(x);
+                        info.MultiplayerStartPositions = &StageFunctions.MultiplayerStart.Pointer[x];
                         break;
                     }
                 }
 
-                for (int x = 0; x < Pointers.MultiPlayerBragPointer.Count; x++)
+                for (int x = 0; x < StageFunctions.MultiPlayerBrag.Count; x++)
                 {
-                    if (Pointers.MultiPlayerBragPointer[x].StageId == stageId)
+                    if (StageFunctions.MultiPlayerBrag[x].StageId == stageId)
                     {
-                        stageInfo.MultiplayerBragPositions = (MultiplayerBrag*) Pointers.MultiPlayerBragPointer.GetPointerToElement(x);
+                        info.MultiplayerBragPositions = &StageFunctions.MultiPlayerBrag.Pointer[x];
                         break;
                     }
                 }
             }
             else
             {
-                for (int x = 0; x < Pointers.SinglePlayerStartPointer.Count; x++)
+                for (int x = 0; x < StageFunctions.SinglePlayerStart.Count; x++)
                 {
-                    if (Pointers.SinglePlayerStartPointer[x].StageId == stageId)
+                    if (StageFunctions.SinglePlayerStart[x].StageId == stageId)
                     {
-                        stageInfo.StartPositions = (SingleplayerStart*) Pointers.SinglePlayerStartPointer.GetPointerToElement(x);
+                        info.StartPositions = &StageFunctions.SinglePlayerStart.Pointer[x];
                         break;
                     }
                 }
             }
 
-            for (int x = 0; x < Pointers.BothPlayerEndPointer.Count; x++)
+            for (int x = 0; x < StageFunctions.BothPlayerEnd.Count; x++)
             {
-                if (Pointers.BothPlayerEndPointer[x].StageId == stageId)
+                if (StageFunctions.BothPlayerEnd[x].StageId == stageId)
                 {
-                    stageInfo.EndPositions = (SingleplayerEnd*) Pointers.BothPlayerEndPointer.GetPointerToElement(x);
+                    info.EndPositions = &StageFunctions.BothPlayerEnd.Pointer[x];
                     break;
                 }
             }
 
-            return stageInfo;
+            return info;
         }
     }
 }

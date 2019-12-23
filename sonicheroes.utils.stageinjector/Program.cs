@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Threading;
-using Reloaded.Hooks.Definitions;
-using Reloaded.Hooks.Definitions.X86;
-using Reloaded.Hooks.ReloadedII.Interfaces;
+using Heroes.SDK;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Mod.Interfaces.Internal;
-using Reloaded.Universal.Redirector.Interfaces;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Enums;
-using SonicHeroes.Utils.StageInjector.Common.Structs.Positions.Substructures;
+using IReloadedHooks = Reloaded.Hooks.ReloadedII.Interfaces.IReloadedHooks;
 
 namespace SonicHeroes.Utils.StageInjector
 {
@@ -28,11 +20,12 @@ namespace SonicHeroes.Utils.StageInjector
         {
             _modLoader = (IModLoader)loader;
             _modLoader.GetController<IReloadedHooks>().TryGetTarget(out _hooks);
+            SDK.Init(_hooks);
 
             /* Your mod code starts here. */
             _modLoader.ModLoading   += ModLoading;
             _modLoader.ModUnloading += ModUnloading;
-            _collection = new StageCollection(_modLoader, _hooks);
+            _collection = new StageCollection(_modLoader);
         }
 
         /// <summary>

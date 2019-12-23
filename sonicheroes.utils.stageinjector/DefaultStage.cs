@@ -1,39 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using SonicHeroes.Utils.StageInjector.Common.Shared;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Enums;
-using SonicHeroes.Utils.StageInjector.Common.Structs;
-using SonicHeroes.Utils.StageInjector.Common.Structs.Positions.Substructures;
+﻿using Heroes.SDK.Definitions.Enums;
+using Heroes.SDK.Definitions.Structures.Stage.Spawn;
+using Reloaded.Memory.Interop;
 using SonicHeroes.Utils.StageInjector.Heroes;
 
 namespace SonicHeroes.Utils.StageInjector
 {
-    public unsafe class DefaultStage : Stage, IDisposable 
+    public unsafe class DefaultStage : StageBase 
     {
         /* Default positions at 0,0,0 if null for any stage. */
-        private static PinnedManagedObject<PositionStart[]> _defaultStartPositions = new PinnedManagedObject<PositionStart[]>(new[] { new PositionStart(), new PositionStart(), new PositionStart(), new PositionStart(), new PositionStart() } );
-        private static PinnedManagedObject<PositionEnd[]>   _defaultEndPositions   = new PinnedManagedObject<PositionEnd[]>(new[] { new PositionEnd(), new PositionEnd(), new PositionEnd(), new PositionEnd(), new PositionEnd() });
+        private static Pinnable<PositionStart> _defaultStartPositions = new Pinnable<PositionStart>(new[] { new PositionStart(), new PositionStart(), new PositionStart(), new PositionStart(), new PositionStart() } );
+        private static Pinnable<PositionEnd>   _defaultEndPositions   = new Pinnable<PositionEnd>(new[] { new PositionEnd(), new PositionEnd(), new PositionEnd(), new PositionEnd(), new PositionEnd() });
+        private Pinnable<PositionStart> _startPositionsSingleInMultiplayer;
 
-        private PinnedManagedObject<PositionStart[]> _startPositionsSingleInMultiplayer;
-
-        public DefaultStage(StageId stageId)
+        public DefaultStage(Stage stageId)
         {
             StageId = stageId;
             var stageInfo = StageInfo.FromStageId(stageId);
 
             if (stageInfo.MultiplayerStartPositions != null)
             {
-                /* For Rose and Chaotix copy 1P and 2P spawns. */
-                _startPositionsSingleInMultiplayer = new PinnedManagedObject<PositionStart[]>(new[]
+                // For Rose and Chaotix copy 1P and 2P spawns in multiplayer.
+                _startPositionsSingleInMultiplayer = new Pinnable<PositionStart>(new[]
                 {
                     stageInfo.MultiplayerStartPositions->Player1Start,
                     stageInfo.MultiplayerStartPositions->Player2Start,
                     stageInfo.MultiplayerStartPositions->Player1Start,
                     stageInfo.MultiplayerStartPositions->Player2Start
                 });
-                StartPositions = (PositionStart*) _startPositionsSingleInMultiplayer.ObjectPtr;
+
+                StartPositions = _startPositionsSingleInMultiplayer.Pointer;
             }
             else
             {
@@ -51,18 +46,13 @@ namespace SonicHeroes.Utils.StageInjector
 
             /* Replace any nulls with defaults. */
             if (StartPositions == null)
-                StartPositions = _defaultStartPositions.AsPointer<PositionStart>();
+                StartPositions = _defaultStartPositions.Pointer;
 
             if (EndPositions == null)
-                EndPositions = _defaultEndPositions.AsPointer<PositionEnd>();
+                EndPositions = _defaultEndPositions.Pointer;
 
             if (BragPositions == null)
-                BragPositions = _defaultEndPositions.AsPointer<PositionEnd>();
-        }
-
-        public void Dispose()
-        {
-
+                BragPositions = _defaultEndPositions.Pointer;
         }
     }
 }

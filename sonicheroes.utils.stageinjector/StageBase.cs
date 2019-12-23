@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Reloaded.Memory;
-using Reloaded.Universal.Redirector.Interfaces;
-using SonicHeroes.Utils.StageInjector.Common;
-using SonicHeroes.Utils.StageInjector.Common.Shared;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Enums;
-using SonicHeroes.Utils.StageInjector.Common.Shared.Splines;
-using SonicHeroes.Utils.StageInjector.Common.Structs.Positions.Substructures;
-using SonicHeroes.Utils.StageInjector.Common.Structs.Splines;
-using SonicHeroes.Utils.StageInjector.Common.Utilities;
+﻿using Heroes.SDK.Definitions.Enums;
+using Heroes.SDK.Definitions.Structures.Stage.Spawn;
+using Heroes.SDK.Definitions.Structures.Stage.Splines;
 
 namespace SonicHeroes.Utils.StageInjector
 {
-    public abstract unsafe class Stage
+    public abstract unsafe class StageBase
     {
-        public StageId        StageId           { get; protected set; }
+        public Stage          StageId           { get; protected set; }
         public PositionStart* StartPositions    { get; protected set; }
         public PositionEnd*   EndPositions      { get; protected set; }
         public PositionEnd*   BragPositions     { get; protected set; }
@@ -24,7 +14,7 @@ namespace SonicHeroes.Utils.StageInjector
 
 
         /* Autoimplemented by R# */
-        protected bool Equals(Stage other)
+        protected bool Equals(StageBase other)
         {
             return StageId == other.StageId &&
                    StartPositions == other.StartPositions &&
@@ -38,7 +28,7 @@ namespace SonicHeroes.Utils.StageInjector
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Stage)obj);
+            return Equals((StageBase)obj);
         }
 
         public override int GetHashCode()
