@@ -21,7 +21,7 @@ namespace SonicHeroes.Utils.StageInjector
         {
             _modLoader = (IModLoader)loader;
             _modLoader.GetController<IReloadedHooks>().TryGetTarget(out _hooks);
-            SDK.Init(_hooks);
+            SDK.Init(_hooks, null);
 
             /* Your mod code starts here. */
             _modLoader.ModLoading   += ModLoading;
