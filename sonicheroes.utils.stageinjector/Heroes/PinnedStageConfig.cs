@@ -1,12 +1,13 @@
 ﻿using System;
 using Heroes.SDK.Definitions.Enums;
 using Heroes.SDK.Definitions.Structures.Stage.Spawn;
+using Heroes.SDK.Parsers.Custom;
 using Reloaded.Memory.Interop;
 
 namespace SonicHeroes.Utils.StageInjector.Heroes
 {
     /// <summary>
-    /// Pins an individual <see cref="Config"/> for access from native code.
+    /// Pins an individual <see cref="StageConfig"/> for access from native code.
     /// </summary>
     public class PinnedStageConfig : IDisposable
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Heroes.SDK.Definitions.Structures.Stage.Splines;
+using Heroes.SDK.Parsers.Custom;
 using Reloaded.Memory.Interop;
 using Reloaded.Memory.Pointers;
 using Reloaded.Messaging.Interfaces;
