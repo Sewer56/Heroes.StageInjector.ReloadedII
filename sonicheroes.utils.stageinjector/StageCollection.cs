@@ -55,7 +55,8 @@ namespace SonicHeroes.Utils.StageInjector
             var crashWorkaround = new[]
             {
                 "use32",
-                "mov [0xA2CF70], dword 0x7CFF90"
+                "mov edi, dword [esp + 0x58]", // Take pointer to object list from function parameters.
+                "mov [0xA2CF70], dword edi"
             };
             _setLimitCrashWorkaround = SDK.ReloadedHooks.CreateAsmHook(crashWorkaround, 0x43D1EA, AsmHookBehaviour.ExecuteFirst).Activate();
         }
