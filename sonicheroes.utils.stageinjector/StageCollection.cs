@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Heroes.SDK;
 using Heroes.SDK.API;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Universal.Redirector.Interfaces;
@@ -9,6 +10,7 @@ using Heroes.SDK.Definitions.Enums;
 using Heroes.SDK.Definitions.Structures.Stage.Spawn;
 using Heroes.SDK.Definitions.Structures.Stage.Splines;
 using Reloaded.Hooks.Definitions;
+using Reloaded.Hooks.Definitions.Enums;
 using Stage = Heroes.SDK.Definitions.Enums.Stage;
 using static Heroes.SDK.Classes.PseudoNativeClasses.StageFunctions;
 
@@ -27,6 +29,12 @@ namespace SonicHeroes.Utils.StageInjector
         private IHook<SearchIntroStageLocator> _getBragPositionHook;
         private IHook<SearchStartStageLocator> _getStartPositionHook;
 
+        /// <summary>
+        /// Workaround to odd "off by one" error (in game code?) causing first byte of pointer to list of objects at A2CF70
+        /// to be overwritten.
+        /// </summary>
+        private IAsmHook _setLimitCrashWorkaround;
+
         public StageCollection(IModLoader loader)
         {
             _modLoader = loader;
@@ -36,12 +44,20 @@ namespace SonicHeroes.Utils.StageInjector
             _getEndPositionHook = Fun_GetEndPosition.Hook(GetEndPositionImpl).Activate();
             _getBragPositionHook = Fun_GetIntroPosition.Hook(GetBragPositionImpl).Activate();
             _getStartPositionHook = Fun_GetStartPosition.Hook(GetStartPositionImpl).Activate();
-
+            
             // Populate Default Stages
             foreach (var stageId in (Stage[])Enum.GetValues(typeof(Stage)))
             {
                 _allStages.Add(new DefaultStage(stageId));
             }
+
+            // Temporary crash workaround for SET objects beyond default limits.
+            var crashWorkaround = new[]
+            {
+                "use32",
+                "mov [0xA2CF70], dword 0x7CFF90"
+            };
+            _setLimitCrashWorkaround = SDK.ReloadedHooks.CreateAsmHook(crashWorkaround, 0x43D1EA, AsmHookBehaviour.ExecuteFirst).Activate();
         }
 
         /// <summary>
