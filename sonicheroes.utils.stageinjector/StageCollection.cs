@@ -48,7 +48,12 @@ namespace SonicHeroes.Utils.StageInjector
             // Populate Default Stages
             foreach (var stageId in (Stage[])Enum.GetValues(typeof(Stage)))
             {
-                _allStages.Add(new DefaultStage(stageId));
+                // Rail Canyon for Chaotix
+                var stage = stageId != Stage.RailCanyonChaotix
+                                     ? new DefaultStage(stageId)
+                                     : new DefaultStage(Stage.RailCanyon);
+
+                _allStages.Add(stage);
             }
 
             // Temporary crash workaround for SET objects beyond default limits.
