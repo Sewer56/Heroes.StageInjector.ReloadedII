@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AssemblyName>SonicHeroes.Utils.StageInjector</AssemblyName>
@@ -10,7 +10,19 @@
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <StartupObject />
+    <OutputPath>$(RELOADEDIIMODS)\sonicheroes.utils.stageinjector</OutputPath>
+    <LangVersion>preview</LangVersion>
+    <RobustILLink>true</RobustILLink>
   </PropertyGroup>
+
+  <Import Project="Robust.Trimming.targets" />
+
+  <ItemGroup>
+    <RobustLinkRoots Include="SonicHeroes.Utils.StageInjector" />
+    <RobustLinkAssemblies Include="Heroes.SDK" />
+    <RobustLinkAssemblies Include="Reloaded.Memory" />
+    <TrimmerRootDescriptor Include="MyRoots.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="ModConfig.json" />
@@ -27,17 +39,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Reloaded.Mod.Interfaces" Version="1.6.0" />
-    <PackageReference Include="Reloaded.SharedLib.Hooks" Version="1.4.0" />
+    <PackageReference Include="Reloaded.Mod.Interfaces" Version="2.1.0" />
+    <PackageReference Include="Reloaded.SharedLib.Hooks" Version="1.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Submodules\Heroes.SDK\Heroes.SDK.Library\Heroes.SDK.csproj" />
     <ProjectReference Include="..\Submodules\Redirector\Reloaded.Universal.Redirector.Interfaces\Reloaded.Universal.Redirector.Interfaces.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <NativeLibs Remove="StageBase.cs" />
   </ItemGroup>
 
 </Project>

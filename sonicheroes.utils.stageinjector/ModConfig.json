@@ -1,15 +1,52 @@
-{
+﻿{
   "ModId": "sonicheroes.utils.stageinjector",
   "ModName": "Sonic Heroes: Stage Injector",
   "ModAuthor": "Sewer56",
   "ModVersion": "1.1.7",
   "ModDescription": "Mod that allows for the loading of custom stages in other mods with ease",
   "ModDll": "SonicHeroes.Utils.StageInjector.dll",
+  "ModIcon": "Preview.png",
   "ModR2RManagedDll32": "x86/SonicHeroes.Utils.StageInjector.dll",
   "ModR2RManagedDll64": "x64/SonicHeroes.Utils.StageInjector.dll",
   "ModNativeDll32": "",
   "ModNativeDll64": "",
-  "ModIcon": "Preview.png",
-  "ModDependencies": [ "reloaded.sharedlib.hooks", "reloaded.universal.redirector" ],
-  "SupportedAppId": [ "tsonic_win.exe" ]
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "Sewer56.Update.ReleaseMetadata.json",
+  "PluginData": {
+    "GitHubDependencies": {
+      "IdToConfigMap": {
+        "reloaded.sharedlib.hooks": {
+          "Config": {
+            "UserName": "Reloaded.SharedLib.Hooks.ReloadedII",
+            "RepositoryName": "Sewer56",
+            "UseReleaseTag": true,
+            "AssetFileName": "reloaded.sharedlib.hooks.zip"
+          }
+        },
+        "reloaded.universal.redirector": {
+          "Config": {
+            "UserName": "Reloaded-Project",
+            "RepositoryName": "Reloaded.Universal.Redirector",
+            "UseReleaseTag": false,
+            "AssetFileName": ""
+          }
+        }
+      }
+    },
+    "GitHubRelease": {
+      "UserName": "Sewer56",
+      "RepositoryName": "Heroes.StageInjector.ReloadedII",
+      "UseReleaseTag": true,
+      "AssetFileName": "Mod.zip"
+    }
+  },
+  "IsUniversalMod": false,
+  "ModDependencies": [
+    "reloaded.sharedlib.hooks",
+    "reloaded.universal.redirector"
+  ],
+  "OptionalDependencies": [],
+  "SupportedAppId": [
+    "tsonic_win.exe"
+  ]
 }

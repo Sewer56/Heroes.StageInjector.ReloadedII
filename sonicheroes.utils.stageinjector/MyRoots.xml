@@ -1,0 +1,10 @@
+﻿<linker>
+  <assembly fullname="Heroes.SDK">
+    <type fullname="SonicHeroes.Utils.StageInjector.Common.SplineFile" preserve="all"/>
+    <type fullname="Heroes.SDK.Parsers.ManagedSpline" preserve="all"/>
+    <type fullname="Heroes.SDK.Parsers.Custom.StageConfig" preserve="all"/>
+    <type fullname="Heroes.SDK.Definitions.Structures.Stage.Spawn*" preserve="all"/>
+    <type fullname="Heroes.SDK.Definitions.Structures.Stage.Splines.SplineVertex" preserve="all"/>
+    <type fullname="Heroes.SDK.Utilities.Math.Structs.Vector3" preserve="all"/>
+  </assembly>
+</linker>
