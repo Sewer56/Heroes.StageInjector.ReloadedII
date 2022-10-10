@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Heroes.SDK;
+﻿using Heroes.SDK;
 using Heroes.SDK.API;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Universal.Redirector.Interfaces;
@@ -205,7 +201,7 @@ public unsafe class StageCollection
             }
         }
 
-        stage = null;
+        stage = null!;
         return false;
     }
 }

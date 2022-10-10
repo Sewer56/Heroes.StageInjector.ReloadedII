@@ -1,12 +1,3 @@
-<div align="center">
-	<h1>Heroes Stage Injector</h1>
-	<img src="https://i.imgur.com/BjPn7rU.png" width="150" align="center" />
-	<br/> <br/>
-	<strong>Creating Custom Stages should be Easy<br/></strong>
-	<p>So why not make it that?</p>
-    <b>Id: sonicheroes.utils.stageinjector</b>
-</div>
-
 # About This Project
 
 This mod provides a framework to allow for the loading of custom stages into Sonic Heroes without the need to write manual code by hand.
@@ -143,3 +134,7 @@ for (int x = 0; x < vertices.Length - 1; x++)
 
 - Loading 1P in 2P levels.
 ![](https://cdn.discordapp.com/attachments/317475533321404416/613064695171252224/unknown.png)
+
+# Acknowledgements
+
+[island by nareerat jaikaew from Noun Project](https://thenounproject.com/browse/icons/term/island/)

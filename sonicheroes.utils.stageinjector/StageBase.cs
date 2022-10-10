@@ -14,7 +14,7 @@ public abstract unsafe class StageBase
 
 
     /* Autoimplemented by R# */
-    protected bool Equals(StageBase other)
+    private bool Equals(StageBase other)
     {
         return StageId == other.StageId &&
                StartPositions == other.StartPositions &&
@@ -23,7 +23,7 @@ public abstract unsafe class StageBase
                Splines == other.Splines;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;

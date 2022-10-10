@@ -1,5 +1,4 @@
-﻿using System;
-using Heroes.SDK.Definitions.Structures.Stage.Splines;
+﻿using Heroes.SDK.Definitions.Structures.Stage.Splines;
 using Heroes.SDK.Parsers.Custom;
 using Reloaded.Memory.Interop;
 using Reloaded.Memory.Pointers;
@@ -15,9 +14,9 @@ public unsafe class CustomStage : StageBase, IDisposable
     private string SplineFilePath => $"{_stageFolder}\\Splines.json";
     private string RedirectionFolder => $"{_stageFolder}\\Files";
 
-    private PinnedStageConfig _config;                           // This keeps the spawn pointers above pinned, do not remove!
-    private PinnableDisposable<Spline>[] _splines;               // This keeps the splines pinned for unmanaged memory, do not remove.
-    private Pinnable<BlittablePointer<Spline>> _managedSplines;  // This keeps the pointer to array of splines pinned for unmanaged memory, do not remove.
+    private PinnedStageConfig _config = null!;                   // This keeps the spawn pointers above pinned, do not remove!
+    private PinnableDisposable<Spline>[] _splines = null!;       // This keeps the splines pinned for unmanaged memory, do not remove.
+    private Pinnable<BlittablePointer<Spline>> _managedSplines = null!; // This keeps the pointer to array of splines pinned for unmanaged memory, do not remove.
 
     private string _stageFolder;
     private WeakReference<IRedirectorController> _redirectorController;

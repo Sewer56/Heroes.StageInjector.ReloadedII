@@ -1,5 +1,4 @@
-﻿using System;
-using Heroes.SDK.Definitions.Enums;
+﻿using Heroes.SDK.Definitions.Enums;
 using Heroes.SDK.Definitions.Structures.Stage.Spawn;
 using Heroes.SDK.Parsers.Custom;
 using Reloaded.Memory.Interop;

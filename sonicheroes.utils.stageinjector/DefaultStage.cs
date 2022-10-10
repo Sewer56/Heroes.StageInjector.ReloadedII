@@ -10,7 +10,7 @@ public unsafe class DefaultStage : StageBase
     /* Default positions at 0,0,0 if null for any stage. */
     private static Pinnable<PositionStart> _defaultStartPositions = new(new[] { new PositionStart(), new PositionStart(), new PositionStart(), new PositionStart(), new PositionStart() } );
     private static Pinnable<PositionEnd>   _defaultEndPositions   = new(new[] { new PositionEnd(), new PositionEnd(), new PositionEnd(), new PositionEnd(), new PositionEnd() });
-    private Pinnable<PositionStart> _startPositionsSingleInMultiplayer;
+    private Pinnable<PositionStart> _startPositionsSingleInMultiplayer = null!; // Keeps in memory, do not remove.
 
     public DefaultStage(Stage stageId)
     {

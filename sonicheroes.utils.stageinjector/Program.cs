@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Heroes.SDK;
+﻿using Heroes.SDK;
 using Reloaded.Mod.Interfaces;
 using Reloaded.Mod.Interfaces.Internal;
 using IReloadedHooks = Reloaded.Hooks.ReloadedII.Interfaces.IReloadedHooks;
@@ -11,15 +9,15 @@ public class Program : IMod
 {
     private const string ThisModId = "sonicheroes.utils.stageinjector";
 
-    private IModLoader _modLoader;
-    private IReloadedHooks _hooks;
-    private StageCollection _collection;
+    private IModLoader _modLoader = null!;
+    private IReloadedHooks _hooks = null!;
+    private StageCollection _collection = null!;
 
     public static void Main() { }
     public void Start(IModLoaderV1 loader)
     {
         _modLoader = (IModLoader)loader;
-        _modLoader.GetController<IReloadedHooks>().TryGetTarget(out _hooks);
+        _modLoader.GetController<IReloadedHooks>().TryGetTarget(out _hooks!);
         SDK.Init(_hooks, null);
 
         /* Your mod code starts here. */
@@ -55,5 +53,5 @@ public class Program : IMod
     public bool CanSuspend() => false;
 
     /* Automatically called by the mod loader when the mod is about to be unloaded. */
-    public Action Disposing { get; }
+    public Action Disposing { get; } = () => { };
 }
