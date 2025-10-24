@@ -1,4 +1,5 @@
-﻿using Heroes.SDK.Definitions.Structures.Stage.Splines;
+﻿using Heroes.SDK.Definitions.Structures.Stage.Spawn;
+using Heroes.SDK.Definitions.Structures.Stage.Splines;
 using Heroes.SDK.Parsers.Custom;
 using Reloaded.Memory.Interop;
 using Reloaded.Memory.Pointers;
@@ -77,10 +78,18 @@ public unsafe class CustomStage : StageBase, IDisposable
     private void ReadConfig()
     {
         var stageConfig = StageConfig.FromPath(ConfigPath);
+        SanitizeStageConfig(stageConfig);
         _config         = new PinnedStageConfig(stageConfig);
         StartPositions  = _config.StartPositions.Pointer;
         EndPositions    = _config.EndPositions.Pointer;
         BragPositions   = _config.BragPositions.Pointer;
         StageId         = _config.StageId;
+    }
+
+    private void SanitizeStageConfig(StageConfig config)
+    {
+        config.StartPositions ??= new PositionStart[5];
+        config.EndPositions ??= new PositionEnd[5];
+        config.BragPositions ??= new PositionEnd[4];
     }
 }
